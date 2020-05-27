@@ -1,0 +1,7 @@
+Maybe all the comments I had in mind would be a bit overwhelming to type in here.
+It's nicely set up in the /comments/ folder.
+
+Open up case-study.html in your main browser to view the documentation / case study.
+
+Thanks,
+Marcos.

@@ -1,0 +1,7 @@
+@media all and (-ms-high-contrast: none) {
+  .hotel-item {
+    &__details {
+      flex: 1;
+    }
+  }
+}

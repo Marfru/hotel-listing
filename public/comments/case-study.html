@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="./reset.css">
+    <link rel="stylesheet" type="text/css" href="./main.css">
+    <title>UX @ Trivago</title>
+  </head>
+  <body>
+  <div class="container">
+    <div class="content">
+    <h2>UX @ Trivago</h2>
+    <h3>Markup Structure:</h3>
+    <ul>
+      <li>Added more meta tags in the header, for search engine / SEO purposes. In this case the Keywords, Description and Author meta tags.</li>
+      <li>The 'http-equip' meta for Edge compatibility.</li>
+      <li>Used the <span>figure</span> tag to wrap the images and add a figcaption if necessary.</li>
+      <li>In the img tag, the <span>alt</span> attribute was missing, which is additional information if a user can not display the image (due to slow connection, a broken image url, etc). In this case, I'm using the Hotel Name as a description.</li>
+      <li>The hotel-list component is now a <span>section</span> instead of a simple div.</li>
+      <li>The main button (View offer) was a div. I have replaced it for the button tag, keeping the same class names of course. This is mainly due to other browsers having the default type set as a value other than "button".</li>
+    </ul>
+    <h3>Arquitecture:</h3>
+    <p>I decided to divide all the information into 3 parts:</p>
+    <ul>
+      <li>Hotel Image (obviously i would be a carousel with images of the property).</li>
+      <li>Hotel Information: includes Hotel Name, Acommodation type, Hotel Stars, Overall Rating from users, etc.</li>
+      <li>Hotel Price and Offer: includes the old price and partner, and the new and updated price and partner, followed by the action Button to view the offer.</li>
+    </ul>
+    <p>Obviously, this default component already had this 3 parts implemented, but not in the best way. It's hard for a user to differenciate information, it could give an overwhelming feeling.
+  We can now differenciate easily the Hotel Information content and the Hotel Price / Deal content, with the different color background.<p>
+    <p>The eyes of the user focuses more on the images and price, if it suits their needs and budget, they will check the information about the hotel: what it includes (breakfast, type of acommodation, rating, cancellation etc). 
+  By seeing the images, you can already have a feeling of what the stars and overall user rating could be.</p>
+    <p>For the responsive mode, we want to take into account user accesibility. It's important that the users can interact with the content, without feeling lost or loosing the experience.</p>
+    <p>In this case, the hotel image uses full-width of the mobile device. The user won't feel the need to zoom in (and could use the carousel to scroll through the images)
+  Under the image, we have the Hotel Name and the information of the acommodation. Followed by a full width View Deal button.
+  The intention of using full width of content and information, is that the user doesn't feel lost, everything is clear and they can interact with one hand / finger.</p>
+  <div class="image-container">
+    <img src="img/iphone.png">
+  </div>
+    <h3>Improvements:</h3>
+    <ul>
+      <li>Package dependencies should be updated to the latest version:
+        <div class="image-container">
+          <img src="img/package-errors.png">
+        </div>
+      </li>
+      <li>Data missing in the content rendering. In this case 'Acommodation Type' and 'Acommodation Star Rating' was missing in the Hotel Information.</li>
+      <li>OverallLiking: There was some rating scores which were natural numbers (for example 7 or 8). It seems inconsistent with the rating scores which include decimals.</li>
+      In this case, I made the fetched natural numbers convert into decimal number (7.0 or 8.0) using <span>|number_format(1)</span>
+    <li>The category rating, instead of being a number, its converted into stars:</li>
+    <pre>
+      {% set ratingCategoryStars = {
+          1: '*',
+          2: '**',
+          3: '***',
+          4: '****',
+          5: '*****'
+      } %}
+    </pre>
+    </ul>
+    <p>Which is later added to the template followed by the data <span>(ratingCategoryStars[item.rating.category])</span>. Of course, these stars are styled accordingly.</p>
+    <ul>
+      <li>Airbnb acommodations do not have category rating, in this case if the returned data is 'null', it adds a class name which is set to <span>display:none</span>. I prefer using boolean props in this case to set the visibility.</li>
+      <li>Added a condition to have different background colors on the User Overall Rating span. It renders different colors depending on the OverallLiking.</li>
+      <li>The Number of User reviews is has a trivago branded font color, which means that the user can interact with it and view reviews from users (basically, the users will knows it's a link, and that it is interactive). It also could've inherited the color and be underlined.</li>
+      <li>In desktop mode, if there was more content added to the Hotel Details/Information, the Hotel Image wouldn't follow the new height. The experience for the user is now improved. 
+      (needed to add <span>min-height: 100%</span>, <span>height: auto</span> and <span>object-fit: cover</span> to the image class).
+        <div class="image-container">
+          <img src="img/unresponsive-image.png"/>
+        </div>
+    
+    </li>
+      <li>Added <span>babel-polyfill</span> dependency for compatibility with IE11 and imported into index.js.</li>
+      <li>The View Deal button has no interaction. There is 2 ways to fix this:
+        <ul>
+          <li>We either use the button tag and add an onClick function (for instance onclick="window.location.href='index.html'").</li>
+          <li>The second solution, which is the one I used, is replacing button with a tag instead.
+          Following HTML5 standards, button should not be a descendent of a.
+          An easy solution and we can use the same class names.</li>
+        </ul>
+      </li>
+      <li>The new deal price (bold green), even though it had already <span>font-weight: bold</span>, the font-size was still similar to the old deal. I increased the font-size a bit from <span>$font-size-s</span> to <span>$font-size-m</span> for a better visualization for users who suffer color blindness (Protanopia, Deuteranopia or Tritanopia).</li>
+      <li>Added <span>_ie.scss</span> in the /settings folder which fixes a main rendering issue in IE11 and earlier. In this case it targets specifically IE11 (a small css hack :))
+      <div class="image-container">
+        <img src="img/ie11.png"/>
+        </div>
+      </li>
+      <li>Extra content can be added in <span>.hotel-item__details</span>, image will be responsive to the extra informative text. And footer with the deal button will remain there.</li>
+      </div>
+      
+    
+    <h3>Styling structure:</h3>
+    <ul>
+      <li>The hotel name is marked up with a h2 tag. It was using the browser's default styling values. In this case, I added the h2 class (from _typo.scss) to the Hotel Name h2 tag.</li>
+      <li>The image was not being responsive if more content was added.</li>
+      <li>More structure was added, which means there were more css elements added.</li>
+      <li>Modifiers were added (for example rating).</li>
+      <li>In my opinion, I would re-do this in a cleaner way. It can be refactored.</li>
+    </ul>
+    <h3>Improvements thought (not done):</h3>
+    <ul>
+    <li>I would've added a skeleton loading screen for users that have a slow internet connection. With a small animation which indicates that content is being loaded. 
+      Made a quick prototype (using Sketch) for mobile:
+      <div class="image-container">
+        <img src="img/skeleton.png"/>
+      </div>
+    </li>
+    <li>The component is rendering in IE11 and there was a main issue which was fixed, but there's space for more fixes always. An extra scss file would be added to specific IE fixes which are only targeted to those browsers. IE Edge, Firefox, Chrome, and Safari work perfectly for Desktop. Such as Safari and Chrome for iPhone. (tested on Crossbrowsertesting.com)</li>
+    <li>Would've been nice to add more content such as: Breakfast included, type of room, cancellation to fill in space.</li>
+    <li>An image carousel of the acommodation.</li>
+    <li>An extra information toggle block.</li>
+    <li>As stated before, I would re-do it in a cleaner way probably.</li>
+    </ul>
+    <h3>Conclusion:</h3>
+    <p>It was indeed a fun project! A challenge to identify errors and improvements in 5 hours, which is what it took me, without counting this documentation.</p>
+    <p>I wanted to make it as simple as possible, since its targetted for all audiences. On the mobile version it's pretty clear what you see. An image (carousel, not implemented :P)), the information of the hotel (Name, Star Rating, Acommodation type, User Rating, and more information. And to finish, a clear View Deal button with full-width and in a light green background block.</p>
+    <p>Thanks a lot for reading up to here! And hopefully we could work together and learn from each other.</p>
+    </div>
+    <footer>
+      <div class="container">
+      Written by  <a href="https://www.linkedin.com/in/marcos-frutos-3a023385/" target="_blank">Marcos Frutos</a>
+      </div>
+    </footer>
+  </body>
+</html>
